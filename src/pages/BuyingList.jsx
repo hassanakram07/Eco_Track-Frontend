@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, CheckCircle, AlertTriangle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom'; // Added useNavigate
 import client from '../api/client';
 
 const BuyingList = () => {
     const [scraps, setScraps] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate(); // Initialized useNavigate
+
+    const handleSellClick = (material) => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+        } else {
+            navigate('/sell/details', { state: { material: material.name } });
+        }
+    };
 
     useEffect(() => {
         const fetchMaterials = async () => {
@@ -85,7 +96,10 @@ const BuyingList = () => {
                                         <div className="flex items-center gap-2 text-sm text-gray-500 font-mono">
                                             Code: {scrap.code}
                                         </div>
-                                        <button className="px-6 py-2 bg-white text-black font-bold rounded-full hover:bg-accent-cyan transition-colors flex items-center gap-2 text-sm">
+                                        <button
+                                            onClick={() => handleSellClick(scrap)}
+                                            className="px-6 py-2 bg-white text-black font-bold rounded-full hover:bg-accent-cyan transition-colors flex items-center gap-2 text-sm"
+                                        >
                                             Sell This <ArrowRight size={16} />
                                         </button>
                                     </div>

@@ -8,7 +8,8 @@ export default function Register() {
         firstName: '',
         email: '',
         password: '',
-        role: 'Manager'
+        password: '',
+        role: 'Customer'
     });
     const [error, setError] = useState(null);
     const navigate = useNavigate();
@@ -113,6 +114,7 @@ export default function Register() {
                                 onChange={handleChange}
                                 className="w-full bg-black/40 border border-white/10 rounded-xl px-12 py-4 text-white focus:outline-none focus:border-accent-cyan/50 focus:ring-1 focus:ring-accent-cyan/50 transition-all appearance-none cursor-pointer"
                             >
+                                <option value="Customer">User</option>
                                 <option value="Manager">Manager</option>
                                 <option value="Admin">Admin</option>
                             </select>

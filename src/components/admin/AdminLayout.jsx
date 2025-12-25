@@ -16,6 +16,22 @@ import {
 const AdminLayout = () => {
     const [isSidebarOpen, setSidebarOpen] = useState(true);
     const location = useLocation();
+    const navigate = React.useNavigate ? React.useNavigate() : null; // Safety check in case of version diff
+
+    // Strict Role Check
+    React.useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (!storedUser) return; // Router will handle unauth via protected route usually, but double check
+
+        try {
+            const user = JSON.parse(storedUser);
+            if (user.role !== 'Admin' && user.role !== 'Manager') {
+                window.location.href = '/'; // Hard redirect if not admin
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }, [location]);
 
     const navItems = [
         { name: 'Dashboard', path: '/admin', icon: <LayoutDashboard size={20} /> },
@@ -53,8 +69,8 @@ const AdminLayout = () => {
                                     key={item.path}
                                     to={item.path}
                                     className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all group ${isActive
-                                            ? 'bg-accent-cyan/10 text-accent-cyan font-semibold border border-accent-cyan/20'
-                                            : 'text-content-secondary hover:bg-white/5 hover:text-white'
+                                        ? 'bg-accent-cyan/10 text-accent-cyan font-semibold border border-accent-cyan/20'
+                                        : 'text-content-secondary hover:bg-white/5 hover:text-white'
                                         }`}
                                 >
                                     <span className={isActive ? 'text-accent-cyan' : 'text-gray-500 group-hover:text-white'}>

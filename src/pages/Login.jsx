@@ -14,10 +14,17 @@ export default function Login() {
         setError(null);
         try {
             const response = await client.post('/auth/login', { email, password });
-            const token = response.data.token;
+            const { token, user } = response.data;
             if (token) {
                 localStorage.setItem('token', token);
-                navigate('/dashboard'); // or standard React route if not using full page refresh
+                localStorage.setItem('user', JSON.stringify(user));
+
+                // Role-based Redirect
+                if (user.role === 'Admin' || user.role === 'Manager') {
+                    navigate('/admin');
+                } else {
+                    navigate('/');
+                }
             } else {
                 setError('Login failed: No token received');
             }
